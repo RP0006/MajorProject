@@ -13,6 +13,11 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 from dataclasses import dataclass
 from Majorproject.components.data_transformation import DataTransformation
+
+from Majorproject.components.model_trainer import ModelTrainerConfig
+from Majorproject.components.model_trainer import ModelTrainer
+
+
 # Creating a configuration class using @dataclass
 # This class stores all file paths related to data ingestion
 @dataclass
@@ -33,8 +38,11 @@ class DataIngestion:
           # Logging message
         logging.info("Entered the Data ingestion method or component")
         try:
-            df=pd.read_csv('notebook/data/stud.csv')
-            logging.info('Read the dataset as dataframe')
+            data_path = os.path.join('data','stud.csv')
+            if not os.path.exists(data_path):
+                data_path = os.path.join('artifact','data.csv')
+            df=pd.read_csv(data_path)
+            logging.info(f'Read the dataset as dataframe from {data_path}')
             
             # Creating artifact folder if it does not exist
             # os.path.dirname extracts folder name from path
@@ -72,4 +80,7 @@ if __name__=="__main__":
     train_data,test_data,_=obj.initiate_data_ingestion()
 
     data_transformation=DataTransformation()
-    data_transformation.initiate_data_transformation(train_data,test_data)
+    train_arr,test_arr,_=data_transformation.initiate_data_transformation(train_data,test_data)
+    modeltrainer=ModelTrainer()
+    modeltrainer.initiate_model_trainer(train_arr,test_arr)
+    print(modeltrainer.initiate_model_trainer(train_arr,test_arr))
