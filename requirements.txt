@@ -6,4 +6,6 @@ seaborn
 jupyterlab
 flask
 streamlit
--e .
+scikit-learn
+ctaboost
+#-e .
