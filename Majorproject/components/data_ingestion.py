@@ -1,12 +1,18 @@
 import os
 import sys
+
+# Ensure package imports work when executing this file directly
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
+
 from Majorproject.exception import CustomException
 from Majorproject.logger import logging
 
 from sklearn.model_selection import train_test_split
 import pandas as pd
 from dataclasses import dataclass
-
+from Majorproject.components.data_transformation import DataTransformation
 # Creating a configuration class using @dataclass
 # This class stores all file paths related to data ingestion
 @dataclass
@@ -63,4 +69,7 @@ class DataIngestion:
         
 if __name__=="__main__":
     obj=DataIngestion()
-    obj.initiate_data_ingestion()
+    train_data,test_data,_=obj.initiate_data_ingestion()
+
+    data_transformation=DataTransformation()
+    data_transformation.initiate_data_transformation(train_data,test_data)
